@@ -23,7 +23,7 @@ const createCustomer = async (req, res) => {
         },
         // We add an `include` outside of the `data` object to make sure the new contact is returned in the result
         // This is like doing RETURNING in SQL
-        include: { 
+        include: {
             contact: true
         }
     })
@@ -31,6 +31,4 @@ const createCustomer = async (req, res) => {
     res.json({ data: createdCustomer });
 }
 
-module.exports = {
-    createCustomer
-};
+module.exports = { createCustomer };
