@@ -99,22 +99,3 @@ function updateMovie (req, res) {
 module.exports = { getMovies, createMovie, getSingleMovie, updateMovie };
 
 
-/**
- const update = await prisma.user.update({
-  where: {
-    id: 6,
-  },
-  data: {
-    posts: {
-      update: {
-        where: {
-          id: 9,
-        },
-        data: {
-          title: 'My updated title',
-        },
-      },
-    },
-  },
-})
- */
