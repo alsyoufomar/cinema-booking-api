@@ -1,7 +1,5 @@
 const express = require("express");
-const {
-    createCustomer
-} = require('../controllers/customer');
+const { createCustomer, updateCustomer } = require('../controllers/customer');
 
 const router = express.Router();
 
@@ -10,5 +8,5 @@ const router = express.Router();
 // that looks like http://localhost:4000/customer/register
 router.post("/register", createCustomer);
 
-
+router.patch("/:id", updateCustomer);
 module.exports = router;

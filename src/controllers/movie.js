@@ -4,7 +4,7 @@ const prisma = require('../utils/prisma');
 const createMovie = (req, res) => {
   const { title, runtimeMins, screenId, startsAt } = req.body;
   let options = { create: { screenId, startsAt } }
-  if (startsAt === undefined) options = {}
+  if (screenId === undefined) options = {}
 
   prisma.movie.create({
     data: {
@@ -67,8 +67,54 @@ const getMovies = async (req, res) => {
   res.json({ movies: foundMovie });
 }
 
+function updateMovie (req, res) {
+  const { title, runtimeMins, screeningId, screenId, startsAt } = req.body
+
+  prisma.movie.update({
+    where: {
+      id: parseInt(req.params.id)
+    },
+    data: {
+      title,
+      runtimeMins,
+      screenings: {
+        update: {
+          where: {
+            id: parseInt(screeningId)
+          },
+          data: {
+            screenId,
+            startsAt
+          }
+        }
+      }
+    },
+    include: {
+      screenings: true
+    }
+  })
+    .then(movie => res.json({ data: movie }))
+}
+
+module.exports = { getMovies, createMovie, getSingleMovie, updateMovie };
 
 
-module.exports = { getMovies, createMovie, getSingleMovie };
-
-
+/**
+ const update = await prisma.user.update({
+  where: {
+    id: 6,
+  },
+  data: {
+    posts: {
+      update: {
+        where: {
+          id: 9,
+        },
+        data: {
+          title: 'My updated title',
+        },
+      },
+    },
+  },
+})
+ */
