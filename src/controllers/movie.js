@@ -62,7 +62,15 @@ const getMovies = async (req, res) => {
   }
   const foundMovie = await prisma.movie.findMany({
     where,
-    include: { screenings: true }
+    include: {
+      screenings: {
+        where: {
+          startsAt: {
+            gt: new Date()
+          }
+        }
+      }
+    }
   })
   res.json({ movies: foundMovie });
 }

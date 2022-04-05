@@ -2,10 +2,11 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function seed () {
-  await createCustomer();
+  const customer = await createCustomer();
   const movies = await createMovies();
   const screens = await createScreens();
   await createScreenings(screens, movies);
+  await createReview(customer, movies)
 
   process.exit(0);
 }
@@ -95,6 +96,35 @@ async function createScreenings (screens, movies) {
       console.log('Screening created', screening);
     }
   }
+}
+
+async function createReview (customer, movies) {
+  console.log('movieeeeeeeeeeeeeees', movies, customer)
+
+  const review = await prisma.review.create({
+    data: {
+      content: 'I love kebab',
+      movie: {
+        connect: {
+          id: movies[0].id
+        }
+      },
+      customer: {
+        connect: {
+          id: customer.id
+        }
+      }
+    },
+    include: {
+      movie: true,
+      customer: true
+    }
+  });
+
+  console.log('review created', review);
+
+  return review;
+
 }
 
 seed()
