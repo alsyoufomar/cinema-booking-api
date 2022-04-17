@@ -2,19 +2,21 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function seed () {
-  const customer = await createCustomer();
+  const user = await createUser();
   const movies = await createMovies();
   const screens = await createScreens();
   await createScreenings(screens, movies);
-  await createReview(customer, movies)
+  await createReview(user, movies)
 
   process.exit(0);
 }
 
-async function createCustomer () {
-  const customer = await prisma.customer.create({
+async function createUser () {
+  const user = await prisma.user.create({
     data: {
       name: 'Alice',
+      username: 'aliceOscobar',
+      password: 'alice',
       contact: {
         create: {
           email: 'alice@boolean.co.uk',
@@ -27,9 +29,9 @@ async function createCustomer () {
     }
   });
 
-  console.log('Customer created', customer);
+  console.log('User created', user);
 
-  return customer;
+  return user;
 }
 
 async function createMovies () {
@@ -98,8 +100,8 @@ async function createScreenings (screens, movies) {
   }
 }
 
-async function createReview (customer, movies) {
-  console.log('movieeeeeeeeeeeeeees', movies, customer)
+async function createReview (user, movies) {
+  console.log('movieeeeeeeeeeeeeees', movies, user)
 
   const review = await prisma.review.create({
     data: {
@@ -109,15 +111,15 @@ async function createReview (customer, movies) {
           id: movies[0].id
         }
       },
-      customer: {
+      user: {
         connect: {
-          id: customer.id
+          id: user.id
         }
       }
     },
     include: {
       movie: true,
-      customer: true
+      user: true
     }
   });
 
